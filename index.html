@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LuminaEd — Today Command & Classroom Intelligence</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="assets/js/tailwind-config.js"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" href="assets/css/styles.css" />
+</head>
+<body class="min-h-screen lg:h-screen lg:overflow-hidden p-0 sm:p-3 lg:p-4 flex items-stretch justify-center">
+
+  <!-- Main Elevated App Shell (1:1 Rounded Outer Container) -->
+  <div class="w-full max-w-[1600px] bg-white sm:rounded-[24px] border border-slate-200/80 shadow-[0_20px_50px_-15px_rgba(15,23,42,0.08)] flex flex-col lg:flex-row overflow-hidden relative">
+
+    <!-- Mobile Sidebar Backdrop -->
+    <div id="mobileBackdrop" onclick="toggleMobileSidebar(false)" class="fixed inset-0 bg-slate-900/35 backdrop-blur-[2px] z-40 hidden lg:hidden transition-opacity"></div>
+
+    <!-- LEFT SIDEBAR (Fixed 240px on Desktop, Independent Scroll) -->
+    <aside id="appSidebar" class="fixed inset-y-0 left-0 z-50 w-[244px] bg-white border-r border-slate-100 flex flex-col justify-between transform -translate-x-full lg:translate-x-0 lg:static lg:shrink-0 transition-all duration-300 ease-out">
+      
+      <!-- Top Logo + Navigation -->
+      <div class="flex flex-col flex-1 overflow-y-auto custom-scrollbar">
+        <!-- Brand Header -->
+        <div class="h-16 px-5 flex items-center justify-between shrink-0">
+          <button onclick="switchView('today-command')" class="flex items-center gap-2.5 group focus:outline-none">
+            <!-- Custom Sharp Geometric Brand SVG Logo -->
+            <div class="w-7 h-7 rounded-full bg-gradient-to-tr from-brand-600 via-brand-500 to-accent-500 p-[1.5px] shadow-xs group-hover:scale-105 transition-transform">
+              <div class="w-full h-full rounded-full bg-white flex items-center justify-center">
+                <svg class="w-4 h-4 text-brand-600" viewBox="0 0 24 24" fill="none">
+                  <path d="M12 2L14.6 9.4L22 12L14.6 14.6L12 22L9.4 14.6L2 12L9.4 9.4L12 2Z" fill="url(#luminaGrad)" />
+                  <circle cx="12" cy="12" r="2.2" fill="#FFFFFF" />
+                  <defs>
+                    <linearGradient id="luminaGrad" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
+                      <stop stop-color="#0284C7" />
+                      <stop offset="1" stop-color="#F59E0B" />
+                    </linearGradient>
+                  </defs>
+                </svg>
+              </div>
+            </div>
+            <span id="brandTitle" class="font-display font-bold text-[15.5px] tracking-tight text-slate-900">LuminaEd</span>
+          </button>
+
+          <button onclick="toggleCompactSidebar()" title="Perkecil / Perluas Sidebar" class="hidden lg:flex w-7 h-7 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 items-center justify-center transition-colors">
+            <i data-lucide="panel-left" class="w-4 h-4"></i>
+          </button>
+          <button onclick="toggleMobileSidebar(false)" class="lg:hidden w-7 h-7 rounded-lg text-slate-400 hover:text-slate-700 flex items-center justify-center">
+            <i data-lucide="x" class="w-4 h-4"></i>
+          </button>
+        </div>
+
+        <!-- Primary Navigation List -->
+        <nav id="sidebarNav" class="px-3 py-2 space-y-1">
+          <!-- Rendered dynamically via JS so badges update in real-time -->
+        </nav>
+      </div>
+
+      <!-- Bottom Educator Profile Card -->
+      <div class="p-3.5 shrink-0 border-t border-slate-100/80 bg-white">
+        <button onclick="switchView('settings')" class="w-full p-2.5 rounded-2xl border border-slate-100 bg-slate-50/50 hover:bg-brand-50/40 hover:border-brand-200/70 transition-all flex items-center justify-between gap-2.5 text-left group">
+          <div class="flex items-center gap-2.5 min-w-0">
+            <img
+              src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=160&q=80"
+              onerror="this.onerror=null;this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 fill=%22%230284C7%22/><text x=%2250%22 y=%2258%22 font-size=%2242%22 font-family=%22sans-serif%22 font-weight=%22bold%22 fill=%22white%22 text-anchor=%22middle%22>NW</text></svg>';"
+              alt="Nadia Wijaya"
+              class="w-9 h-9 rounded-full object-cover ring-2 ring-white shadow-xs shrink-0"
+            />
+            <div class="sidebar-label min-w-0">
+              <p class="text-[13px] font-semibold text-slate-900 truncate group-hover:text-brand-700 transition-colors">Nadia Wijaya</p>
+              <p class="text-[11px] text-slate-400 truncate">Lead Teacher</p>
+            </div>
+          </div>
+          <i data-lucide="chevron-right" class="sidebar-label w-4 h-4 text-slate-400 group-hover:text-brand-600 group-hover:translate-x-0.5 transition-all shrink-0"></i>
+        </button>
+      </div>
+    </aside>
+
+    <!-- RIGHT MAIN WORKSPACE (Independent Scroll + Sticky Topbar) -->
+    <main id="mainScrollArea" class="flex-1 aurora-workspace overflow-y-auto custom-scrollbar flex flex-col relative">
+      
+      <!-- Sticky Top Utility Bar -->
+      <header class="sticky top-0 z-30 px-4 sm:px-7 py-3.5 flex items-center justify-between gap-3 bg-white/45 backdrop-blur-md border-b border-white/50">
+        <div class="flex items-center gap-3 flex-1 max-w-md">
+          <!-- Mobile Hamburger -->
+          <button onclick="toggleMobileSidebar(true)" class="lg:hidden w-9 h-9 rounded-full bg-white shadow-pill border border-slate-100 flex items-center justify-center text-slate-600 hover:text-brand-600">
+            <i data-lucide="menu" class="w-4 h-4"></i>
+          </button>
+
+          <!-- Global Search Pill -->
+          <div class="relative flex-1 max-w-[280px]">
+            <i data-lucide="search" class="w-3.5 h-3.5 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none"></i>
+            <input
+              id="globalSearchInput"
+              type="text"
+              oninput="handleGlobalSearch(this.value)"
+              placeholder="Search here..."
+              class="w-full bg-white/95 hover:bg-white focus:bg-white text-[12.5px] text-slate-700 placeholder:text-slate-400 pl-9 pr-8 py-2 rounded-full border border-slate-200/70 shadow-pill focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/15 transition-all"
+            />
+            <button id="clearGlobalSearchBtn" onclick="clearGlobalSearch()" class="hidden absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
+              <i data-lucide="x" class="w-3.5 h-3.5"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Right Header Controls -->
+        <div class="flex items-center gap-2.5">
+          <!-- Quick Create Button -->
+          <button onclick="openItemModal()" class="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full bg-brand-600 hover:bg-brand-700 text-white text-[12px] font-medium shadow-xs transition-all active:scale-[0.98]">
+            <i data-lucide="plus" class="w-3.5 h-3.5"></i>
+            <span>New Task</span>
+          </button>
+
+          <!-- Notification Bell + Dropdown -->
+          <div class="relative">
+            <button onclick="toggleNotificationMenu()" class="w-9 h-9 rounded-full bg-white/95 hover:bg-white border border-slate-200/70 shadow-pill flex items-center justify-center text-slate-600 hover:text-brand-600 transition-colors relative">
+              <i data-lucide="bell" class="w-4 h-4"></i>
+              <span id="notifDot" class="w-2 h-2 rounded-full bg-accent-500 ring-2 ring-white absolute top-2 right-2.5"></span>
+            </button>
+
+            <!-- Notification Popover -->
+            <div id="notificationDropdown" class="hidden absolute right-0 mt-2 w-80 bg-white rounded-2xl border border-slate-100 shadow-xl p-3.5 z-50">
+              <div class="flex items-center justify-between pb-2.5 mb-2 border-b border-slate-100">
+                <span class="text-[12.5px] font-semibold text-slate-900">Academic Alerts</span>
+                <button onclick="markNotificationsRead()" class="text-[11px] font-medium text-brand-600 hover:text-brand-700">Mark all read</button>
+              </div>
+              <div class="space-y-2 text-[12px]">
+                <div class="p-2.5 rounded-xl bg-brand-50/60 border border-brand-100/70">
+                  <p class="font-medium text-slate-800">PowerSchool Sync Complete</p>
+                  <p class="text-slate-500 text-[11px] mt-0.5">5 new Lab 4 submissions imported for Grade 7.</p>
+                </div>
+                <div class="p-2.5 rounded-xl bg-amber-50/60 border border-amber-100/70">
+                  <p class="font-medium text-slate-800">Parent Message Priority</p>
+                  <p class="text-slate-500 text-[11px] mt-0.5">Mrs. Hartono requested Grade 8B algebra feedback.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- DYNAMIC SPA VIEW CONTAINER -->
+      <div id="viewContainer" class="flex-1 pb-8">
+        <!-- Rendered by JS: Defaults to 1:1 Today Command Dashboard -->
+      </div>
+
+    </main>
+  </div>
+
+  <!-- CREATE / EDIT COMMAND ITEM MODAL -->
+  <div id="itemModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4">
+    <div onclick="closeItemModal()" class="modal-backdrop fixed inset-0 bg-slate-900/40 backdrop-blur-[2px]"></div>
+    <div class="modal-panel relative w-full max-w-lg bg-white rounded-[22px] border border-slate-100 shadow-2xl overflow-hidden z-10">
+      <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/60">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-xl bg-brand-50 text-brand-600 flex items-center justify-center">
+            <i data-lucide="sparkles" class="w-4 h-4"></i>
+          </div>
+          <div>
+            <h3 id="itemModalTitle" class="font-display font-semibold text-[15px] text-slate-900">Add Command Item</h3>
+            <p class="text-[11.5px] text-slate-400">Sinkron otomatis dengan KPI, Grafik Donat & Feed</p>
+          </div>
+        </div>
+        <button onclick="closeItemModal()" class="w-8 h-8 rounded-full hover:bg-slate-200/60 flex items-center justify-center text-slate-400 hover:text-slate-700">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <form id="itemForm" onsubmit="saveCommandItem(event)" class="p-6 space-y-4">
+        <input type="hidden" id="editItemId" />
+
+        <div>
+          <label class="block text-[12px] font-medium text-slate-700 mb-1">Judul Tugas / Aktivitas <span class="text-rose-500">*</span></label>
+          <input id="fieldTitle" type="text" required placeholder="Contoh: Lab 4: Photosynthesis Inquiry Reports" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-[13px] focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/15" />
+        </div>
+
+        <div>
+          <label class="block text-[12px] font-medium text-slate-700 mb-1">Deskripsi Ringkas <span class="text-rose-500">*</span></label>
+          <input id="fieldSubtitle" type="text" required placeholder="Contoh: 5 ungraded submissions remaining across 2 sections" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-[13px] focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/15" />
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+          <div>
+            <label class="block text-[12px] font-medium text-slate-700 mb-1">Kategori Workload</label>
+            <select id="fieldCategory" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-[13px] bg-white focus:outline-none focus:border-brand-500">
+              <option value="Grade">Grade (Penilaian)</option>
+              <option value="Needs Reply">Needs Reply (Balas Pesan)</option>
+              <option value="Student Flags">Student Flags (Perhatian Siswa)</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-[12px] font-medium text-slate-700 mb-1">Tingkat Prioritas</label>
+            <select id="fieldPriority" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-[13px] bg-white focus:outline-none focus:border-brand-500">
+              <option value="High">High</option>
+              <option value="Medium" selected>Medium</option>
+              <option value="Low">Low</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
+          <div>
+            <label class="block text-[12px] font-medium text-slate-700 mb-1">Kelas</label>
+            <input id="fieldGradeLevel" type="text" required value="7th Grade" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-[13px] focus:outline-none focus:border-brand-500" />
+          </div>
+          <div>
+            <label class="block text-[12px] font-medium text-slate-700 mb-1">Integrasi EdTech</label>
+            <select id="fieldSource" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-[13px] bg-white focus:outline-none focus:border-brand-500">
+              <option value="PowerSchool">PowerSchool</option>
+              <option value="Canvas LMS">Canvas LMS</option>
+              <option value="ParentSquare">ParentSquare</option>
+              <option value="Google Classroom">Google Classroom</option>
+              <option value="LuminaAI">LuminaAI</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-[12px] font-medium text-slate-700 mb-1">Time Saved (menit)</label>
+            <input id="fieldMinutes" type="number" min="5" max="120" required value="20" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-[13px] focus:outline-none focus:border-brand-500" />
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-[12px] font-medium text-slate-700 mb-1">Label Tombol Aksi</label>
+          <input id="fieldActionLabel" type="text" required value="Grade Submission" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-[13px] focus:outline-none focus:border-brand-500" />
+        </div>
+
+        <div class="pt-3 border-t border-slate-100 flex items-center justify-end gap-2.5">
+          <button type="button" onclick="closeItemModal()" class="px-4 py-2 rounded-full border border-slate-200 text-[12.5px] font-medium text-slate-600 hover:bg-slate-50 transition-colors">Batal</button>
+          <button type="submit" class="px-5 py-2 rounded-full bg-brand-600 hover:bg-brand-700 text-white text-[12.5px] font-medium shadow-xs transition-all">Simpan Item</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- DELETE CONFIRMATION MODAL -->
+  <div id="deleteModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4">
+    <div onclick="closeDeleteModal()" class="modal-backdrop fixed inset-0 bg-slate-900/40 backdrop-blur-[2px]"></div>
+    <div class="modal-panel relative w-full max-w-sm bg-white rounded-[22px] border border-slate-100 shadow-2xl p-6 z-10 text-center">
+      <div class="w-12 h-12 rounded-2xl bg-rose-50 text-rose-500 flex items-center justify-center mx-auto mb-3.5">
+        <i data-lucide="trash-2" class="w-5 h-5"></i>
+      </div>
+      <h3 class="font-display font-semibold text-[16px] text-slate-900">Hapus Item Command?</h3>
+      <p id="deleteModalDesc" class="text-[12.5px] text-slate-500 mt-1.5 leading-relaxed">Item yang dihapus akan langsung memperbarui metrik Triage dan grafik beban kerja Anda.</p>
+      <div class="mt-5 flex items-center justify-center gap-2.5">
+        <button onclick="closeDeleteModal()" class="flex-1 px-4 py-2 rounded-full border border-slate-200 text-[12.5px] font-medium text-slate-600 hover:bg-slate-50">Batal</button>
+        <button id="confirmDeleteBtn" class="flex-1 px-4 py-2 rounded-full bg-rose-600 hover:bg-rose-700 text-white text-[12.5px] font-medium shadow-xs">Ya, Hapus</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- AI INTELLIGENCE BRIEF SLIDE-OVER DRAWER -->
+  <div id="aiDrawer" class="fixed inset-0 z-50 hidden justify-end">
+    <div onclick="toggleAiDrawer(false)" class="modal-backdrop fixed inset-0 bg-slate-900/35 backdrop-blur-[2px]"></div>
+    <div class="relative w-full max-w-md bg-white h-full shadow-2xl border-l border-slate-100 z-10 flex flex-col justify-between overflow-y-auto custom-scrollbar">
+      <div class="p-6 space-y-5">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+          <div class="flex items-center gap-2.5">
+            <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-brand-500 to-accent-500 text-white flex items-center justify-center shadow-xs">
+              <i data-lucide="sparkles" class="w-4 h-4"></i>
+            </div>
+            <div>
+              <h3 class="font-display font-semibold text-[15px] text-slate-900">AI Intelligence Brief</h3>
+              <p class="text-[11px] text-slate-400">Synthesized across 8 EdTech apps</p>
+            </div>
+          </div>
+          <button onclick="toggleAiDrawer(false)" class="w-8 h-8 rounded-full hover:bg-slate-100 flex items-center justify-center text-slate-400">
+            <i data-lucide="x" class="w-4 h-4"></i>
+          </button>
+        </div>
+
+        <div class="p-4 rounded-2xl bg-gradient-to-br from-brand-50 via-white to-amber-50/60 border border-brand-100">
+          <p class="text-[11.5px] font-semibold uppercase tracking-wider text-brand-700">Executive Morning Synthesis</p>
+          <p class="text-[13px] text-slate-700 mt-1.5 leading-relaxed">
+            LuminaEd AI telah mengelompokkan <span class="font-semibold text-slate-900">19 laporan praktikum</span>, menyusun draf balasan untuk <span class="font-semibold text-slate-900">orang tua murid Grade 8B</span>, dan mendeteksi penurunan skor kuis aljabar pada <span class="font-semibold text-slate-900">3 siswa</span> sebelum jam pelajaran Period 1 dimulai.
+          </p>
+        </div>
+
+        <div class="space-y-3">
+          <h4 class="text-[12px] font-semibold text-slate-800">Rekomendasi Aksi Cepat</h4>
+          <div class="p-3.5 rounded-xl border border-slate-100 bg-slate-50/70 space-y-1.5">
+            <div class="flex items-center justify-between">
+              <span class="text-[12px] font-semibold text-slate-900">1. Auto-Rubric Lab 4 Photosynthesis</span>
+              <span class="text-[11px] font-medium text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">+20m saved</span>
+            </div>
+            <p class="text-[11.5px] text-slate-500">4 dari 5 laporan memenuhi seluruh kriteria hipotesis. Siap disetujui dalam 1 klik.</p>
+          </div>
+          <div class="p-3.5 rounded-xl border border-slate-100 bg-slate-50/70 space-y-1.5">
+            <div class="flex items-center justify-between">
+              <span class="text-[12px] font-semibold text-slate-900">2. Intervensi Dini Grade 8B Linear Equation</span>
+              <span class="text-[11px] font-medium text-amber-600 bg-amber-50 px-2 py-0.5 rounded-full">High Priority</span>
+            </div>
+            <p class="text-[11.5px] text-slate-500">Siapkan 5 menit latihan terbimbing di awal Period 1 (Ruang 3B).</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="p-5 border-t border-slate-100 bg-slate-50/50 flex items-center justify-between gap-3">
+        <button onclick="toggleAiDrawer(false)" class="w-full py-2.5 rounded-full bg-obsidian hover:bg-slate-800 text-white text-[12.5px] font-medium transition-colors">
+          Kembali ke Today Command
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATION CONTAINER -->
+  <div id="toastContainer" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,84 @@
+    :root {
+      --primary: #0284C7;
+      --accent: #F59E0B;
+      --surface: #FFFFFF;
+      --canvas: #F8FAFC;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #EEF2F6;
+      color: #0F172A;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Signature Pastel Aurora Header Wash matching reference 1:1 */
+    .aurora-workspace {
+      background:
+        radial-gradient(62% 38% at 14% 0%, rgba(186, 230, 253, 0.65) 0%, rgba(186, 230, 253, 0) 75%),
+        radial-gradient(52% 36% at 54% 2%, rgba(224, 231, 255, 0.62) 0%, rgba(224, 231, 255, 0) 75%),
+        radial-gradient(48% 34% at 92% 0%, rgba(243, 232, 255, 0.62) 0%, rgba(243, 232, 255, 0) 75%),
+        linear-gradient(180deg, #F4F8FC 0%, #F8FAFC 340px, #F8FAFC 100%);
+    }
+
+    /* Slim Custom Scrollbar */
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #CBD5E1;
+      border-radius: 9999px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: #0284C7;
+    }
+
+    /* Crisp SaaS Staggered Entrance */
+    @keyframes fadeSlideUp {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .animate-stagger {
+      opacity: 0;
+      animation: fadeSlideUp 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      animation-delay: calc(var(--stagger-index, 0) * 55ms);
+    }
+
+    /* Card Subtle Lift */
+    .kpi-card {
+      transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.22s ease, border-color 0.22s ease;
+    }
+    .kpi-card:hover {
+      transform: translateY(-2px);
+      border-color: #BAE6FD;
+      box-shadow: 0 10px 24px -6px rgba(2, 132, 199, 0.08), 0 4px 10px -4px rgba(15, 23, 42, 0.04);
+    }
+
+    /* Donut Chart Smooth Segment Transition */
+    .donut-segment {
+      transition: stroke-dasharray 0.7s cubic-bezier(0.16, 1, 0.3, 1), stroke-dashoffset 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* Tabular numbers for counters */
+    .tabular-nums {
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Modal Backdrop Transition */
+    .modal-backdrop {
+      transition: opacity 0.2s ease;
+    }
+    .modal-panel {
+      transition: transform 0.24s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease;
+    }
